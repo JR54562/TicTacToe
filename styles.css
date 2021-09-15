@@ -1,0 +1,25 @@
+body {
+    font-family: system-ui, sans-serif;
+    background-color: rgb(246, 239, 239);
+}
+
+section {
+    text-align: center;
+}
+
+.brdContnr{
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    width: 300px;
+    margin: 50px auto;
+    
+}
+
+.square{
+    font-family: 'Times New Roman', Times, serif;
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 0 0 1px;
+    border: 1px solid #333;
+    line-height: 100px;
+    }
