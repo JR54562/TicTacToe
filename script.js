@@ -2,43 +2,29 @@
 const dispStatus = document.querySelector('.gameStatus')
 const rstButton = document.querySelector('.gameRestart')
 // Declare variables for tracking game
-let gameActive = true
-let currPlayer = "X"
+let playerOneTurn = true
+dispStatus.innerText = "Red's turn"
+
 
 // We need to store the game state here
-let moves = ["", "", "", "", "", "", "", "", ""]
+let moves = ["", "", "", "", "", "", "", "", ""];
 
-const winMessage = () => `Player ${currPlayer} has won!`;
-const drawMessage = () => `Game ended in a draw!`;
-const currPlyrTurn = () => `It's ${currPlayer}'s turn`;
-
+// Changes status text according to the player's turn
 const checkStatus = () => {
     if (playerOneTurn) {
-        dispStatus.innerHTML = "Red's turn!"
+        dispStatus.innerText = "It's Red's Turn"
     } else {
-        dispStatus.innerHTML = "Blue's turn!"
-}
-}
-
-// Start by showing who's turn it is below board
-dispStatus.innerHTML = currPlyrTurn();
-
-// create outline of functions to be used
-function squarePlayed() {
-///
-}
-function playerChange() {
-///
-}
-function resultsValidate() {
-///
+        dispStatus.innerText = "It's Blue's Turn"
+    }
 }
 
 // adding event listeners for "square" click
-let squares = document.querySelectorAll('.square')
-let playerOneTurn = true
 
+let squares = document.querySelectorAll('.square')
+let counter = 0
+counter ++
 const squareClick = (event) => {
+    counter++
     if (playerOneTurn) {
         event.target.style.backgroundColor = "red"
         moves[event.target.id] = "red"
@@ -46,19 +32,19 @@ const squareClick = (event) => {
         event.target.style.backgroundColor = "blue"
         moves[event.target.id] = "blue"
     }
-    playerOneTurn = !playerOneTurn
-
+  playerOneTurn = !playerOneTurn
+    
     event.target.removeEventListener("click", squareClick)
-    checkStatus()
-    console.log(moves)
-checkWinner()
+    checkStatus()    
+    checkWinner()
 }
 
-  // Add click functionality
+  // Add click functionality to every 'square'
 squares.forEach(square => {
     square.addEventListener("click", squareClick)
 })
 
+// Logic for checking the combinations out. Looking to improve this 'grid'
 const checkWinner = () => {
     if (moves[0] === "red" && moves[1] === "red" && moves[2] === "red" ||
         (moves[3]) === "red" && moves[4] === "red" && moves[5] === "red" ||
@@ -68,20 +54,36 @@ const checkWinner = () => {
         (moves[2]) === "red" && moves[5] === "red" && moves[8] === "red" ||
         (moves[0]) === "red" && moves[4] === "red" && moves[8] === "red" ||
         (moves[2]) === "red" && moves[4] === "red" && moves[4] === "red") {
-        console.log("Red wins!")
-    }else if (moves[0] === "red" && moves[1] === "red" && moves[2] === "red" ||
-(moves[3]) === "blue" && moves[4] === "blue" && moves[5] === "blue" ||
-(moves[6]) === "blue" && moves[7] === "blue" && moves[8] === "blue" ||
-(moves[0]) === "blue" && moves[3] === "blue" && moves[6] === "blue" ||
-(moves[1]) === "blue" && moves[4] === "blue" && moves[7] === "blue" ||
-(moves[2]) === "blue" && moves[5] === "blue" && moves[8] === "blue" ||
-(moves[0]) === "blue" && moves[4] === "blue" && moves[8] === "blue" ||
-(moves[2]) === "blue" && moves[4] === "blue" && moves[4] === "blue" )
-    console.log("Blue wins")
-
+        dispStatus.innerText = "Red wins!"
+        noClick()
+    } else if (moves[0] === "red" && moves[1] === "red" && moves[2] === "red" ||
+        (moves[3]) === "blue" && moves[4] === "blue" && moves[5] === "blue" ||
+        (moves[6]) === "blue" && moves[7] === "blue" && moves[8] === "blue" ||
+        (moves[0]) === "blue" && moves[3] === "blue" && moves[6] === "blue" ||
+        (moves[1]) === "blue" && moves[4] === "blue" && moves[7] === "blue" ||
+        (moves[2]) === "blue" && moves[5] === "blue" && moves[8] === "blue" ||
+        (moves[0]) === "blue" && moves[4] === "blue" && moves[8] === "blue" ||
+        (moves[2]) === "blue" && moves[4] === "blue" && moves[4] === "blue") {
+        dispStatus.innerText = "Blue wins!"
+        noClick()
+    } else if (counter >= 9) {
+        dispStatus.innerText = "It's a tie!!"
+    }
 }
 
-
-
- 
-
+// remove event listener
+const noClick = () => {
+    squares.forEach(square => {
+        square.removeEventListener("click", squareClick)
+    })
+}
+rstButton.addEventListener("click", () => {
+    squares.forEach(square => {
+        square.style.backgroundColor = "white"
+        square.addEventListener("click", squareClick)
+    })
+    moves = ["", "", "", "", "", "", "", "", ""]
+    playerOneTurn = true
+    counter = 0
+    checkStatus()
+})
